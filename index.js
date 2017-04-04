@@ -35,16 +35,19 @@ ChunkHashReplacePlugin.prototype.apply = function(compiler) {
                     files.forEach(file => {
                         let resourcePath = file.replace('css' + pathSeparator, '').replace(/\\/g, '/');
                         let resourceURI = resourcePath.replace(`${hash}.`, '');
-                        htmlOutput = htmlOutput.replace(resourceURI, resourcePath);
+                        let jsonRegExp = new RegExp("[:]\\s(\".*\")");
+
+                        if (jsonRegExp.test(htmlOutput)) {
+                            var jsonRepRegexp = new RegExp(`:+\\s?\"${resourceURI}\"`);
+                            htmlOutput = htmlOutput.replace(jsonRepRegexp, `: "${resourcePath}"`);
+                        } else {
+                            htmlOutput = htmlOutput.replace(resourceURI, resourcePath);
+                        }
                     });
                 }
 
-                mkdirp(path.dirname(dest), (err) => {
-                    if(err) {
-                        console.error(err);
-                    }
-                    fs.writeFile(dest, htmlOutput);
-                });
+                mkdirp.sync(path.dirname(dest));
+                fs.writeFileSync(dest, htmlOutput);
             });
         });
     })
