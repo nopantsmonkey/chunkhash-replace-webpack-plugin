@@ -14,6 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "fs": "0.0.2",
+    "mkdirp": "0.5.1",
     "path": "^0.12.7"
   },
   "source": "https://github.com/danethurber/webpack-manifest-plugin",
