@@ -1,64 +1,36 @@
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
+const path = require('path');
+const fs = require('fs');
+const pathSeparator = process.platform.toLowerCase() === 'win32' ? '\\' : '/';
 
 function ChunkHashReplacePlugin(options) {
-  this.src = options.src;
-  this.dest = options.dest;
+    this.src = options.src;
+    this.dest = options.dest;
 }
 
 ChunkHashReplacePlugin.prototype.apply = function(compiler) {
-  var self = this;
-  var folder = compiler.options.context;
-  var src = path.join(folder, self.src);
-  var dest = path.join(folder, self.dest);
+    let self = this;
+    let folder = compiler.options.context;
+    let src = path.join(folder, self.src);
+    let dest = path.join(folder, self.dest);
 
-  fs.readFile(src, 'utf8', function(err, data) {
-    compiler.plugin('done', function(statsData) {
-      const stats = statsData.toJson();
-      const template = fs.readFileSync(src, 'utf8');
-
-      let htmlOutput = template;
-      for (let chunk of stats.chunks) {
-        const {
-          hash,
-          files,
-          names,
-        } = chunk;
-        const bundleName = names[0];
-        files.forEach(file => {
-          const extension = file.split('.').slice(-1).join('');
-          const fileName = file
-            .split(hash)
-            .join('')
-            .split('.')
-            .slice(0, -1)
-            .join('')
-            .replace(/[^a-z0-9]/gi, ''); // TODO: Make this more rigid
-          let regex = null;
-
-          switch(extension) {
-            case 'js': {
-              regex = new RegExp(`(src=["'].*)(${fileName}\\.js)(["'])`, 'i');
-              break;
+    fs.readFile(src, 'utf8', function(err, data) {
+        compiler.plugin('done', function(statsData) {
+            const stats = statsData.toJson();
+            let htmlOutput = fs.readFileSync(src, 'utf8');
+            for (let chunk of stats.chunks) {
+                const {hash, files} = chunk;
+                files.forEach(file => {
+                    let resourcePath = file.replace('css' + pathSeparator, '').replace(/\\/g, '/');
+                    let resourceURI = resourcePath.replace(`${hash}.`, '');
+                    htmlOutput = htmlOutput.replace(resourceURI, resourcePath);
+                });
             }
-            case 'css': {
-              regex = new RegExp(`(href=["'].*)(${fileName}\\.css)(["'])`, 'i');
-              break;
-            }
-            default: {
-              return;
-            }
-          }
 
-          htmlOutput = htmlOutput.replace(regex, `$1${file}$3`);
+            fs.writeFile(dest, htmlOutput);
         });
-      }
-
-      fs.writeFile(dest, htmlOutput);
     });
-  });
 };
 
 module.exports = ChunkHashReplacePlugin;
