@@ -16,6 +16,7 @@
     "fs": "0.0.2",
     "path": "^0.12.7"
   },
+  "source": "https://github.com/danethurber/webpack-manifest-plugin",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nopantsmonkey/chunkhash-replace-webpack-plugin.git"
