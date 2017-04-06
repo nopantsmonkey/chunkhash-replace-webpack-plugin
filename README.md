@@ -50,8 +50,9 @@ module.exports = {
   ]
 };
 ```
-###HTML
 
+## Output Example 1
+### Input
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -78,4 +79,65 @@ module.exports = {
   <script src="/static/app.bc9412b20a3d196ac0eb.js"></script>
 </body>
 </html>
+```
+
+## Output Example 2
+###Input
+
+```javascript
+var link1 = "/static/app.css";
+```
+
+###Output
+
+```javascript
+var link1 = "/static/app.bc9412b20a3d196ac0eb.css";
+```
+
+## Output Example 3
+###Input
+
+```html
+<script type="text/javascript">
+    var _stylesPath_ = {
+        "/static/app.css": "/static/app.css"
+    };
+</script>
+```
+
+###Output
+```html
+<script type="text/javascript">
+    var _stylesPath_ = {
+        "/static/app.css": "/static/app.bc9412b20a3d196ac0eb.css"
+    };
+</script>
+```
+
+##Supported plugin options
+### Option 1 (individual)
+```
+new ChunkHashReplacePlugin({
+    src: 'templates/a.html',
+    dest: 'build/templates/b.html'
+})
+```
+
+### Option 2 (array)
+```
+new ChunkHashReplacePlugin({
+    src: 'templates/a.html',
+    dest: 'build/templates/b.html',
+}, {
+    src: 'templates/a1.html',
+    dest: 'build/templates/b1.html',
+}])
+```
+
+### Option 3 (directory)
+```
+new ChunkHashReplacePlugin({
+    src: 'templates/',
+    dest: 'build/templates/'
+})
 ```
