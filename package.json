@@ -15,7 +15,8 @@
   "devDependencies": {
     "fs": "0.0.2",
     "mkdirp": "0.5.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "slash": "^1.0.0"
   },
   "source": "https://github.com/danethurber/webpack-manifest-plugin",
   "repository": {
