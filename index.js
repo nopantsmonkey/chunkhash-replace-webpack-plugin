@@ -13,11 +13,13 @@ function ChunkHashReplacePlugin(options) {
 		this.src = options.src;
 		this.dest = options.dest;
 		this.stripContent = options.stripContent;
+		this.replace = options.replace || [{pattern: null, replacement: null}]
 	} else {
 		this.list = [{
 			src: options.src,
 			dest: options.dest,
-			stripContent: options.stripContent || ''
+			stripContent: options.stripContent || '',
+			replace: options.replace || [{pattern: null, replacement: null}]
 		}];
 	}
 }
@@ -66,6 +68,9 @@ function transform(src, dest, stripContent, compiler) {
 		compiler.plugin('done', function(statsData) {
 			const stats = statsData.toJson();
 			let htmlOutput = fs.readFileSync(src, 'utf8');
+			if (self.replace !== null) {
+				self.replace.forEach(r => htmlOutput = htmlOutput.replace(r.pattern, r.replacement));
+			}
 			for (let chunk of stats.chunks) {
 				let {hash, files, names, file} = chunk;
 				files.forEach(file => {
