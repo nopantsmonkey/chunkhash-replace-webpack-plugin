@@ -8,6 +8,7 @@
     "webpack chunkhash replace",
     "webpack replace script reference"
   ],
+  "files": ["index.js"],
   "homepage": "https://github.com/nopantsmonkey/chunkhash-replace-webpack-plugin",
   "main": "index.js",
   "author": "Joey Eng",
