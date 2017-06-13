@@ -1,6 +1,6 @@
 {
-  "name": "chunkhash-replace-webpack-plugin",
-  "version": "1.0.0",
+  "name": "@cwlib/chunkhash-replace-webpack-plugin",
+  "version": "1.0.1",
   "description": "Webpack plugin for replacing js/css bundle references with chunkhash formatted file names.",
   "keywords": [
     "chunkhash",
