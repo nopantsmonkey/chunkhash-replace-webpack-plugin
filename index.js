@@ -106,13 +106,11 @@ function transform(src, dest, stripContent, compiler) {
 }
 
 function replaceChunk(htmlOutput, resourceURI, resourcePath) {
-	const jsonRegExp = new RegExp("[:]\\s(\".*\")");
-	if (jsonRegExp.test(htmlOutput)) {
-		const jsonRepRegexp = new RegExp(`:+\\s?\"${resourceURI}\"`);
+	const jsonRepRegexp = new RegExp(`:+\\s?\"${resourceURI}\"`);
+	if(jsonRepRegexp.test(htmlOutput))
 		htmlOutput = htmlOutput.replace(jsonRepRegexp, `: "${resourcePath}"`);
-	} else {
+	else
 		htmlOutput = htmlOutput.replace(resourceURI, resourcePath);
-	}
 	return htmlOutput;
 }
 
