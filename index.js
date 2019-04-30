@@ -75,7 +75,7 @@ function transform(src, dest, stripContent, compiler) {
 				let {hash, files, names, file} = chunk;
 				files.forEach(file => {
 					let nameIdx = names.indexOf(file);
-					if (nameIdx === -1 && file.indexOf(hash) === -1) {
+					if (nameIdx === -1) {
 						let name = names[0];
 						let extension = path.extname(file)
 						hash = file.replace(new RegExp(name + '\.(.*)' + extension), '$1');
